@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Candidate's List</title>
+	<!-- <meta http-equiv="refresh" content="5;url=getVotersInfo.php"> -->
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/index.css" rel="stylesheet">
+	<script src="../js/jquery3.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			msg = "This will clear all votes casted, continue?";
+        	document.getElementById("modal-msg").innerHTML = msg;
+			$(`#resetvotes`).click(function(){
+				$('#myModal').modal('show');
+			});
+
+			$(`#clearVote`).click(function(){
+				window.location.replace ('../php/resetvotes.php');
+			});
+
+			$(`#printcandidates`).click(function(){
+				location.assign("printableCandidateList.html")
+			});
+			
+		});
+	</script>
+</head>
+<body style="overflow-x: hidden;">
+
+
+ <!-- NAV SIDEBAR -->
+<?php include ('../php/navbar-insidev.php');?>
+<!-- END OF NAV SIDEBAR -->
+<div class="container-fluid">
+	<div class="text-white" style="margin-left: 200px;">
+		<br>
+		<button id="resetvotes" type="button" class="btn btn-danger">Reset Votes</button>
+		<button id="printcandidates" type="button" class="btn btn-success">Print</button>		
+	</div>
+	<div class="container-fluid text-white" style="margin-left: 200px;">
+		<br>
+		<table align="left" cellspacing="1" cellpadding="1" class="vote-admin">
+			<col width="70">
+  			<col width="100">
+  			<col width="200">
+  			<col width="100">
+			<tr>
+				<td align="left" class="text-center"><b>Candidate No</b></td>
+				<td align="left" class="text-center"><b> Last Name </b></td>
+				<td align="left" class="text-center"><b> First Name </b></td>
+				<td align="left" class="text-center"><b>Number of Votes</b></td>
+			</tr>
+				<!-- PHP CODE HERE for getCandidatesInfo -->
+		<?php include('../php/getCandidatesInfo.php'); ?>
+	</div>
+	
+	
+</div>
+
+
+
+
+<div class="container">
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Attention!</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p id="modal-msg"></p>
+        </div>
+        <div class="modal-footer">
+          <button id="clearVote" type="button" class="btn btn-danger" data-dismiss="modal">Proceed</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+
+</body>
+</html>

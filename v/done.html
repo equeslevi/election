@@ -1,0 +1,58 @@
+<?php 
+  session_start(); 
+
+  if (!isset($_SESSION['voterid'])) {
+  	$_SESSION['msg'] = "You must log in first";
+  	header('location: vote.html');
+  }
+  
+  require_once('../php/config.php');
+  $loggedid = ($_SESSION['voterid']);
+  $voterid = mysqli_real_escape_string($db, $loggedid);
+  $q = "SELECT * FROM voters WHERE voterId='$voterid'";
+  $results = mysqli_query($db, $q);
+
+  if (mysqli_num_rows($results) == 1) {
+      $row = mysqli_fetch_array($results);
+      $_SESSION['votername'] = $row['voterFName'] . ' ' . $row['voterLName'];
+      $loggedname = $_SESSION['votername'];
+    }
+
+  if (isset($_SESSION['logout'])) {
+  	unset($_SESSION['voterid']);
+  	session_destroy();
+
+  }
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Voting...</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/index.css" rel="stylesheet">
+  <script src="../js/jquery3.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+	<meta http-equiv="refresh" content="5;url=vote.html">
+</head>
+<body>
+
+
+    <div id="cover-caption" class="h-100 vertical-center mainVote">
+        <div id="container" class="container child vertical-center">
+            <div class="row text-white vertical-center">
+                <div class="col-xs-4 offset-sm-2 text-center vote-cont">
+                    <h1 class="display-3"><b>Thank you for voting, <br>
+                    	<?php
+                    	echo $loggedname . '!';
+                    	?>
+                    </b></h1>
+                    <h4><a href="vote.html"><button type="button" class="btn btn-primary" autofocus>Return</button></a></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<?php session_destroy(); ?>
+</html>

@@ -1,0 +1,220 @@
+html,body {
+    height: 100%;
+    margin: 0px;
+    font-family: "Lato", sans-serif;
+    background-color: #111;
+    background-image: url("../rss/site/bg.jpg");
+    background-position: right;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.center{
+  align-content: center;
+}
+
+div.hidden
+{
+    display: none
+}
+
+.vote-welc {
+  width: 50%;
+  text-align: center;
+}
+
+.input-big {
+  height: 80px;
+  width: 100%;
+/*  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);*/
+}
+
+.input-big[placeholder] {
+  line-height: 80px;
+  font-size: 60px;
+  letter-spacing: 15px;}
+
+.sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.sidenav a {
+    padding: 6px 6px 6px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.main {
+    margin-left: 200px; /* Same as the width of the sidenav */
+}
+
+.mainvote {
+    margin-left: 0px; /* Without the sidenav */
+    display: flex;
+    overflow-y: hidden;
+    overflow-x: hidden;    
+}
+
+img{
+    -webkit-user-select: none; /* Safari 3.1+ */
+    -moz-user-select: none; /* Firefox 2+ */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none; /* Standard syntax */
+    user-drag: none; 
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+.child {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.vote-cont {
+  width: 70%;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+
+.vote-home {
+  width: 70%;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding-top: 50px;
+  padding-bottom: 50px;
+  /*padding-left: 50px;
+  padding-right: 50px;*/
+}
+
+.vote-main {
+  background-color: rgba(0, 0, 0, 0.65);
+}
+
+.vote-admin {
+  background-color: rgba(0, 0, 0, 0.90);
+}
+
+/*.modal-header{
+    text-align: left;
+    align-content: left;
+}*/
+
+.candbox{
+    background-color:rgb(50, 50, 50, 0.8);
+    color: white;
+    font-size: 24px;
+}
+
+.candbox:hover {
+    border: 4px solid #fff;
+}
+
+/* The overlay effect - lays on top of the container and over the image */
+.candoverlay {
+  position: absolute; 
+  bottom: 0; 
+  background: rgb(0, 0, 0);
+  background: rgba(0, 85, 255, 0.7); /* Blue see-through */
+  color: #f1f1f1; 
+  width: 100%;
+  transition: .5s ease;
+  opacity:0;
+  color: white;
+  font-size: 20px;
+  padding: 20px;
+  text-align: center;
+  margin-left: -10px;
+}   
+
+/* When you mouse over the container, fade in the overlay title */
+.candbox:hover .candoverlay {
+  opacity: 1;
+}
+
+.uncandbox{ /*colors when selected*/
+    background-color:#F7DC6F; /*1F618D*/ /*82ACFF*/ 
+    /*color: white;*/
+    font-size: 24px;
+    border: 2px solid #fff;
+}
+
+.uncandbox:hover {
+    border: 4px solid #fff;
+}
+
+/* The overlay effect - lays on top of the container and over the image */
+.uncandoverlay {
+  position: absolute; 
+  bottom: 0; 
+  background: rgb(0, 0, 0);
+  background: rgba(255, 0, 0, 0.7); /* Red see-through */
+  color: #f1f1f1; 
+  width: 100%;
+  transition: .5s ease;
+  opacity:0;
+  color: white;
+  font-size: 20px;
+  padding: 20px;
+  text-align: center;
+  margin-left: -10px;
+}
+
+/* When you mouse over the container, fade in the overlay title */
+.uncandbox:hover .uncandoverlay {
+  opacity: 1;
+}
+
+.cholder {
+  padding-top: 10px;
+  margin-top: 0px;
+  padding-bottom: -10px;
+  margin-bottom: 0px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.name-top{
+  text-align: center;
+  font-size: 0.45em;
+  width: 100%;
+}
+
+.ins-xl {
+  text-align: center;
+  font-size: 0.5em;
+  width: 100%;
+}
+
+.hideCand {
+    display: none;
+}
+
+.indent {
+    margin-left: 200px;
+}
+/*this is for class handling of candidates*/
+
+.cnddt1{}.cnddt2{}.cnddt3{}.cnddt4{}.cnddt5{}.cnddt6{}.cnddt7{}.cnddt8{}.cnddt9{}.cnddt10{}.cnddt11{}.cnddt12{}.cnddt13{}.cnddt14{}.cnddt15{}.cnddt16{}.cnddt17{}.cnddt18{}.cnddt19{}.cnddt20{}
+

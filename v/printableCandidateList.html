@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Candidate List</title>
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/printable.css" rel="stylesheet">
+	<script src="../js/jquery3.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			window.print();
+		});
+	</script>
+</head>
+<body>
+
+<div class="container">
+	<div class="container-fluid">
+		<br>
+		<table align="left" cellspacing="1" cellpadding="1" class="vote-main border-3">
+			<col width="70">
+  			<col width="150">
+  			<col width="200">
+  			<col width="100">
+			<tr class="border-2">
+				<!-- <td align="left" class="text-center border-2"><b>Candidate No</b></td> -->
+				<td align="left" class="text-center border-2"><b>	</b></td>
+				<td align="left" class="text-center border-2"><b> Last Name </b></td>
+				<td align="left" class="text-center border-2"><b> First Name </b></td>
+				<td align="left" class="text-center border-2"><b>Votes Received</b></td>
+			</tr>
+				<!-- PHP CODE HERE for getCandidatesInfo -->
+		<?php include('../php/getPrintableCandidatesInfo.php'); ?>
+	</div>
+</div>
+
+</body>
+</html>

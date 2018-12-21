@@ -1,0 +1,284 @@
+<?php 
+  session_start(); 
+
+  if (!isset($_SESSION['voterid'])) {
+  	$_SESSION['msg'] = "You must log in first";
+  	header('location: vote.html');
+  }
+  if (isset($_SESSION['logout'])) {
+  	session_destroy();
+  	unset($_SESSION['voterid']);
+  	header('location: vote.html');
+  }
+  		
+  require_once('../php/config.php');
+  $loggedid = ($_SESSION['voterid']);
+  $voterid = mysqli_real_escape_string($db, $loggedid);
+  $q = "SELECT * FROM voters WHERE voterId='$voterid' AND voterVoted='0'";
+  $results = mysqli_query($db, $q);
+
+  if (mysqli_num_rows($results) == 1) {
+  	  $row = mysqli_fetch_array($results);
+  	  $_SESSION['votername'] = $row['voterFName'] . ' ' . $row['voterLName'];
+  	  $loggedname = $_SESSION['votername'];
+  	}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Voting...</title>
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/index.css" rel="stylesheet">
+	<script src="../js/jquery3.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			console.log('...');
+			var votecount = 0;
+			var votelimit = 7; //create php var for this
+			var votemin = 5; //create php var for this
+			var candidates = 12; //create php var for this
+			var errormsg = " ";
+			var votes = "";
+			var candida = "";
+			var consmsg = "";
+			var insmsg = "To vote, click on the desired candidate's name or picture <br> To unvote, just click on an already selected candidate"
+			var a = document.getElementById("remv");
+			var b = document.getElementById("remvCap");
+			var c = document.getElementById("confirmVotes");
+			var d = document.getElementById("sendVote");
+			var e = document.getElementById("ins-xl");
+			console.log('Voting system ready...');
+			document.getElementById("ins-xl").innerHTML = insmsg;
+			document.getElementById("remv").innerHTML = votelimit - votecount;
+    		$(`.cholder`).click(function(){
+    			if ($(this).hasClass("uncandbox")) {
+				    votecount--;
+				    consmsg = "Unvoted candidate no. ";
+				    votes[$(this)] = 0;
+				} else {
+					votecount++;
+					consmsg = "Voted candidate no. ";
+					votes[$(this)] = 1;
+				}
+
+        		if (votecount > votelimit) {
+        			votecount = votelimit;
+	        			errormsg = "Vote limit reached, please review selection";
+	        			document.getElementById("modal-msg").innerHTML = errormsg;
+        			$('#myModal').modal('show');
+        			console.log('Vote Limit Reached');
+        		} else {
+					$(a).removeClass("d-none");
+					$(b).removeClass("d-none");
+					$(c).addClass("d-none");
+					$(e).addClass("d-xl-block");
+					if (votecount >= votemin) { $(d).removeClass("d-none");} else { $(d).addClass("d-none");}
+	        		$(this).toggleClass("uncandbox");
+	        		$(this).toggleClass("candbox");
+	        		document.getElementById("remv").innerHTML = (votelimit - votecount);
+	        		var i;
+					$("div").removeClass("hideCand");
+        		}
+
+				if (votelimit == votecount) {
+					$(a).addClass("d-none");
+					$(b).addClass("d-none");
+					$(e).removeClass("d-xl-block");
+					$(c).removeClass("d-none");
+					$(d).removeClass("d-none");
+					var u;
+					var g = document.getElementsByClassName("candbox");
+					var h = g.length;
+					for (u = 0; u <= h; u++) {
+						$(g[u]).toggleClass("hideCand");
+					}
+					$('html, body').animate({
+        				scrollTop: $("#sendVote").offset().top
+    				}, 1000);
+				}
+		    });
+    		$('#submitballot').prop('disabled', false);
+    		var welcdiv = document.getElementById("welcomeDiv");
+		    var votediv = document.getElementById("votingDiv");
+		    setTimeout(function() {
+					    welcdiv.style.display = "none";
+					    console.log('Loading election main');
+					    votediv.style.display = "block";
+					  }, 5000);
+			$("#showCands").click(function(){
+			    welcdiv.style.display = "none";
+			    console.log('Loading election main');
+			    votediv.style.display = "block";
+			});
+			//submit vote ballot
+			$("#submitballot").click(function(){
+				$('#submitballot').prop('disabled', true);
+				$("div.uncandbox").each(function() {
+				    var id = this.id;
+				    if (votes == "") {
+				    	if (id > 9) {
+				    	votes = id;
+				    	} else {
+				    		votes = '0' + id;	
+				    	}
+				    } else {
+				    	if (id > 9) {
+				    		votes = votes + " " + id;
+				    	} else {
+				    		votes = votes + " 0" + id;
+				    	}
+				    }
+				});
+				// to be further enhanced
+				console.log(votes);
+				if (votes.includes('01')) {var cand1 = $('#cand1').val("1");} else {var cand1 = $('#cand1').val("0");}
+				if (votes.includes('02')) {var cand2 = $('#cand2').val("1");} else {var cand2 = $('#cand2').val("0");}
+				if (votes.includes('03')) {var cand3 = $('#cand3').val("1");} else {var cand3 = $('#cand3').val("0");}
+				if (votes.includes('04')) {var cand4 = $('#cand4').val("1");} else {var cand4 = $('#cand4').val("0");}
+				if (votes.includes('05')) {var cand5 = $('#cand5').val("1");} else {var cand5 = $('#cand5').val("0");}
+				if (votes.includes('06')) {var cand6 = $('#cand6').val("1");} else {var cand6 = $('#cand6').val("0");}
+				if (votes.includes('07')) {var cand7 = $('#cand7').val("1");} else {var cand7 = $('#cand7').val("0");}
+				if (votes.includes('08')) {var cand8 = $('#cand8').val("1");} else {var cand8 = $('#cand8').val("0");}
+				if (votes.includes('09')) {var cand9 = $('#cand9').val("1");} else {var cand9 = $('#cand9').val("0");}
+				if (votes.includes('10')) {var cand10 = $('#cand10').val("1");} else {var cand10 = $('#cand10').val("0");}
+				if (votes.includes('11')) {var cand11 = $('#cand11').val("1");} else {var cand11 = $('#cand11').val("0");}
+				if (votes.includes('12')) {var cand12 = $('#cand12').val("1");} else {var cand12 = $('#cand12').val("0");}
+				if (votes.includes('13')) {var cand13 = $('#cand13').val("1");} else {var cand13 = $('#cand13').val("0");}
+				if (votes.includes('14')) {var cand14 = $('#cand14').val("1");} else {var cand14 = $('#cand14').val("0");}
+				if (votes.includes('15')) {var cand15 = $('#cand15').val("1");} else {var cand15 = $('#cand15').val("0");}
+				if (votes.includes('16')) {var cand16 = $('#cand16').val("1");} else {var cand16 = $('#cand16').val("0");}
+				if (votes.includes('17')) {var cand16 = $('#cand17').val("1");} else {var cand17 = $('#cand17').val("0");}
+				if (votes.includes('18')) {var cand16 = $('#cand18').val("1");} else {var cand18 = $('#cand18').val("0");}
+				if (votes.includes('19')) {var cand16 = $('#cand19').val("1");} else {var cand19 = $('#cand19').val("0");}
+				if (votes.includes('20')) {var cand20 = $('#cand20').val("1");} else {var cand20 = $('#cand20').val("0");}
+				var votelist = $('#votelist').val(votes);
+
+				$.post(  
+                     '../php/insert.php',  
+                     $('#submit_ballotform').serialize(),  
+                     function(data)  
+                     {  
+                     	console.log(data);
+                     	window.location.replace("done.html");
+                     }  
+                );
+			});
+		//end document.ready func
+		});
+
+	</script>
+</head>
+<body>
+    <div class="vertical-center container-fluid">
+    	    	<!-- Welcome div -->
+        <div class="container child vote-main vote-welc text-white" id="welcomeDiv">
+            <h1 class="display-2 center"><small> Welcome </small><br><strong>
+                    	<?php
+                    	echo $loggedname . '';
+                    	?>
+                    </strong></h1>
+            <h4><button id="showCands" type="button" class="btn btn-primary" autofocus>Proceed</button></h4>
+            <br>
+        </div>
+        <!-- welcome div end -->
+
+        <!-- Voting Main div -->
+    	<div style="display:none" id="votingDiv" class="container-fluid mainvote vote-main">
+    		<div class="container-fluid d-none d-sm-block col-sm-12"><img class="img-responsive" src="../rss/site/vote-banner.png" width="100%"></div>
+			<div class="container">
+				<!-- voting count div -->
+				<div class="container-fluid">
+					<div class="row text-white display-4 vote-main">
+						<div class="col-xl-12 name-top">Voter: <?php echo $loggedname . '';?></div>
+						<div id="ins-xl" class="col-xs-12 d-none d-xl-block ins-xl">
+							
+						</div>
+						<div id="remvCap" class="col-xs-12 col-md-8" align="right">
+							Votes Remaining: 
+						</div>
+						<div id="remv" class="col-xs-12 col-md-4 vote-main" ></div>
+						<div id="confirmVotes" class="col-xs-12 col-sm-12 text-center d-none">
+							Please review your chosen candidates <br> <small>After reviewing, click on submit on the bottom of the page</small>
+						</div>
+					</div>
+				</div>
+				<!-- candidates div -->
+				<div class="container-fluid vote-main">
+		        <div class="row">
+	        
+			    <?php
+			    $q = "SELECT * FROM candidates";
+				$result = mysqli_query($db, $q);
+
+				if(empty($result)) {
+					echo "ERROR: NO CANDIDATES FOUND";		  
+				} else { 
+	 			if ($result) {
+					while($row = mysqli_fetch_array($result)){
+						$imgname = $row['lastname'] . '-' . $row['firstname'];
+						echo '
+							<div id="'. $row['candidateNo'] .'"class="col-sm-4 col-md-3 cholder candbox">
+					    		<div class="candoverlay"><strong>Vote</strong></div>
+					    		<img class="img-responsive" src="../rss/img/' . $imgname .
+
+					    		'.jpg" width="100%">
+					    		<div class="uncandoverlay"><strong>Unvote</strong></div>
+					    		<p class="text-center"><strong>' . $row['lastname'] . ', ' . $row['firstname']. '</strong></p></div>
+					    	';
+				      } 
+					}
+				}
+				?>
+				</div>
+            <br>
+            <div id="sendVote" class="text-center d-none">
+            	<!-- candidate submit forms -->
+            	<form id="submit_ballotform"> <!-- for further enhancement -->
+					<input type="text" name="cand1" id="cand1" class="d-none"/><input type="text" name="cand2" id="cand2" class="d-none"/><input type="text" name="cand3" id="cand3" class="d-none"/><input type="text" name="cand4" id="cand4" class="d-none"/><input type="text" name="cand5" id="cand5" class="d-none"/><input type="text" name="cand6" id="cand6" class="d-none"/><input type="text" name="cand7" id="cand7" class="d-none"/><input type="text" name="cand8" id="cand8" class="d-none"/><input type="text" name="cand9" id="cand9" class="d-none"/><input type="text" name="cand10" id="cand10" class="d-none"/><input type="text" name="cand11" id="cand11" class="d-none"/><input type="text" name="cand12" id="cand12" class="d-none"/><input type="text" name="cand13" id="cand13" class="d-none"/><input type="text" name="cand14" id="cand14" class="d-none"/><input type="text" name="cand15" id="cand15" class="d-none"/><input type="text" name="cand16" id="cand16" class="d-none"/><input type="text" name="cand17" id="cand17" class="d-none"/><input type="text" name="cand18" id="cand18" class="d-none"/><input type="text" name="cand19" id="cand19" class="d-none"/><input type="text" name="cand20" id="cand20" class="d-none"/><input type="text" name="votelist" id="votelist" class="d-none"/>
+
+					<input type="button" name="submitballot" id="submitballot" class="center-block btn btn-primary input-big" value="Submit" />
+					<br><br><br>
+				</form>  
+				<!-- end submit candidate form -->
+            </div>
+
+            </div>
+        <!-- Voting div end -->
+	</div>
+
+
+
+	
+
+<!-- Modal pop up set up -->
+<div class="container">
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Attention!</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p id="modal-msg"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+    <!-- Scripts here -->
+
+</body>
+</html>
+

@@ -1,0 +1,44 @@
+<?php
+include('../php/login.php');
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vote</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/index.css" rel="stylesheet">
+    <script src="../js/jquery3.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+</head>
+<body style="overflow-y: hidden;">
+
+    <div id="cover-caption" class="h-100 vertical-center mainVote">
+        <div id="container" class="container child vertical-center">
+            <div class="row text-white vertical-center">
+                <div class="col-xs-12 container-fluid text-center vote-home">
+                    <img class="img-responsive" src="../rss/site/banner.png" width="100%">
+                    <br>
+                    <h1 class="display-3"><b>Voter's ID:</b></h1>
+                    <br>
+                    <div class="info-form">
+                        <div style="padding-left: 70px; padding-right: 70px;">
+                        <form action="../php/login.php" method='POST' autocomplete="off" class="justify-content-center" >
+                            <div class="form-group">
+                                <input name='voterID' type="text" class="text-center form-control input-big" autocomplete="off" placeholder="Enter ID here" autofocus >
+                                <br>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                            
+                        </form>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+<?php unset($_SESSION['msg']); ?>
+</body>
+</html>
