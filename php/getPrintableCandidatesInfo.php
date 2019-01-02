@@ -21,8 +21,7 @@ if ($response) {
 	// 	$row['votes'] . '</td></tr>';
 	// }
 	while($row = mysqli_fetch_array($response)){
-		$index = $index + 1;
-		echo '<tr class="border-2"><td align="left" class="text-center border-2">' . 
+ 		echo '<tr class="border-2"><td align="left" class="text-center border-2">' . 
 		$index . '</td><td align="left"  class="border-2 leftspace">' .
 		$row['lastname'] . '</td><td align="left"  class="border-2 leftspace">' . 
 		$row['firstname'] . '</td><td align="left"  class="border-2 text-center">' . 
