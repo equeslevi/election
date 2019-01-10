@@ -214,20 +214,36 @@
 
 				if(empty($result)) {
 					echo "ERROR: NO CANDIDATES FOUND";		  
-				} else { 
-	 			if ($result) {
-					while($row = mysqli_fetch_array($result)){
-						$imgname = $row['lastname'] . '-' . $row['firstname'];
-						echo '
-							<div id="'. $row['candidateNo'] .'"class="col-sm-4 col-md-3 cholder candbox">
-					    		<div class="candoverlay"><strong>Vote</strong></div>
-					    		<img class="img-responsive" src="../rss/img/' . $imgname .
+					} else { 
+		 			if ($result) {
+						while($row = mysqli_fetch_array($result)){
+							$imgname = $row['lastname'] . '-' . $row['firstname'];
+							if ($row['candidateStatus'] == 0) {
+								echo '
+									<div id="'. $row['candidateNo'] .'"class="col-sm-4 col-md-3">
+							    		<img class="img-responsive" src="../rss/img/hidden.png" width="100%">
+							    		<p class="text-center"><strong></strong></p></div>
+							    	';
+							}
+							if ($row['candidateStatus'] == 1) {
+								echo '
+									<div id="'. $row['candidateNo'] .'"class="col-sm-4 col-md-3 cholder candbox">
+							    		<div class="candoverlay"><strong>Vote</strong></div>
+							    		<img class="img-responsive" src="../rss/img/' . $imgname .
 
-					    		'.jpg" width="100%">
-					    		<div class="uncandoverlay"><strong>Unvote</strong></div>
-					    		<p class="text-center"><strong>' . $row['lastname'] . ', ' . $row['firstname']. '</strong></p></div>
-					    	';
-				      } 
+							    		'.jpg" width="100%">
+							    		<div class="uncandoverlay"><strong>Unvote</strong></div>
+							    		<p class="text-center"><strong>' . $row['lastname'] . ', ' . $row['firstname']. '</strong></p></div>
+							    	';
+							}
+							if ($row['candidateStatus'] == 2) {
+								echo '
+									<div id="'. $row['candidateNo'] .'"class="col-sm-4 col-md-3 candbox">
+							    		<img class="img-responsive" src="../rss/img/withrawn.png" width="100%">
+							    		<p class="text-center"><strong>Candidate Withrawn</strong></p></div>
+							    	';
+							}
+					    } 
 					}
 				}
 				?>

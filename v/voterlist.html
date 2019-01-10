@@ -7,10 +7,19 @@
 	<link href="../css/index.css" rel="stylesheet">
 	<script src="../js/jquery3.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
+	<?php include ('../php/pullVoters.php');?>
 	<script type="text/javascript">
+		var msg;
+		var vTotal;
+		var vTableText;
+		var voters;
+		function varInit(){
+			vTotal = <?php echo $voterTotal; ?>;
+			voters = <?php echo $voter; ?>;
+			vTableText = "<col width=70><col width=200><col width=300><col width=100><col width=300><col width=200><b><tr><td></td><td align='left' class='text-center'>Total Number of Voters:</td><td align='left' class='display-4' id='voterplacer'></td></tr><tr><td align='left' class='text-center'>Voter ID</td><td align='left' class='text-center'>Last Name</td><td align='left' class='text-center'>First Name</td><td align='left' class='text-center'>Voted?</td><td align='left' class='text-center'>Date Voted<br>YYYY-MM-DD</td>				<td align='left' class='text-center'>Votes Casted</td></tr></b>"
+		};
+
 		$(document).ready(function(){
-			msg = "This will clear all voters who voted and the date, continue?";
-        	document.getElementById("modal-msg").innerHTML = msg;
 			$(`#resetvotes`).click(function(){
 				$('#myModal').modal('show');
 			});
@@ -18,42 +27,52 @@
 			$(`#clearVote`).click(function(){
 				window.location.replace ('../php/resetvoters.php');
 			});
+			varInit();
+			var i;
+			var w;
+			for (w = 0; w <= vTotal-1; w++) { 
+			  vTableText += "<tr>";
+			    for (i = 0; i <= 5; i++) { 
+			      	if (i==3) {
+			      		if (voters[w][3]=="1") {
+			      			vTableText += "<td align='left' class='text-center'>YES</td>"
+			      		} else {
+			      			vTableText += "<td align='left' class='text-center'></td>"
+			      		}
+			      	}else{
+		    	  	if (voters[w][i]==null||voters[w][i]=="null"||voters[w][i]==0) {
+		    	  		vTableText += "<td align='left' class='text-center'></td>";	
+		    	  	} else {
+		    	  		vTableText += "<td align='left' class='text-center'>" + voters[w][i] + "</td>";	
+		    	  	}}
+			    }
+			 vTableText += "</tr>";
+			}
+			 vTableText += "</table>";
+			document.getElementById("votertable").innerHTML = vTableText;
+			document.getElementById("voterplacer").innerHTML = vTotal;
+			msg = "This will clear all voters who voted and the date, continue?";
+        	document.getElementById("modal-msg").innerHTML = msg;
 
-			
 		});
 	</script>
 </head>
 <body style="overflow-x: hidden;">
-
-
  <!-- NAV SIDEBAR -->
 <?php include ('../php/navbar-insidev.php');?>
 <!-- END OF NAV SIDEBAR -->
 
 <div class="container-fluid">
-	<div class="text-white" style="margin-left: 200px;">
+	<div class="text-white main">
 		<br>
 		<button id="resetvotes" type="button" class="btn btn-danger">Reset Voters</button>
 	</div>
-	<div class="container-fluid text-white" style="margin-left: 200px;">
+	<div class="container-fluid text-white main">
 		<br>
-		<table align="left" cellspacing="1" cellpadding="1" class="vote-admin">
-			<col width="70">
-  			<col width="150">
-  			<col width="300">
-  			<col width="100">
-  			<col width="300">
-  			<col width="200">
-			<tr>
-				<td align="left" class="text-center"><b>Voter ID</b></td>
-				<td align="left" class="text-center"><b>Last Name</b></td>
-				<td align="left" class="text-center"><b>First Name</b></td>
-				<td align="left" class="text-center"class="text-center"><b>Voted?</b></td>
-				<td align="left" class="text-center"><b>Date Voted<br>YYYY-MM-DD</b></td>
-				<td align="left" class="text-center"><b>Votes Casted</b></td>
-			</tr>
+		<table align='left' cellspacing="1" cellpadding="1" class="vote-admin" id="votertable">
+			
 		<!-- PHP CODE HERE for getVotersInfo -->
-		<?php include('../php/getVotersInfo.php'); ?>
+		
 	</div>
 	
 	
@@ -70,10 +89,10 @@
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Attention!</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title text-dark">Attention!</h4>
+          <button type="button" class="close text-dark" data-dismiss="modal">&times;</button>
         </div>
-        <div class="modal-body">
+        <div class="text-dark modal-body">
           <p id="modal-msg"></p>
         </div>
         <div class="modal-footer">
@@ -86,7 +105,5 @@
   </div>
   
 </div>
-
-
 </body>
 </html>
