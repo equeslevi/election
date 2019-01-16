@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Candidate's List</title>
+	<!-- <meta http-equiv="refresh" content="5;url=getVotersInfo.php"> -->
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/index.css" rel="stylesheet">
+	<script src="../js/jquery3.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/sortTable.js"></script>
+	<?php
+		include ('../php/pullCandidates.php');
+		include ('../php/pullVoters.php')
+	?>
+	<script type="text/javascript">
+		var cTotal;
+		var cTableText;
+		var cand;
+		var vDone = <?php echo $donevoters; ?>;
+		var vTotal = <?php echo $voterTotal; ?>;
+		var ajax_data = <?php echo $cand; ?>;
+		function varInit(){
+			cTotal = <?php echo $candTotal; ?>;
+			//cand = <?php echo $cand; ?>;
+			var random_id = function  () 
+				{
+					var id_num = Math.random().toString(9).substr(2,3);
+					var id_str = Math.random().toString(36).substr(2);
+					
+					return id_num + id_str;
+				}
+
+
+				//--->create data table > start
+				var tbl = '';
+				tbl +='<table class="table-sm table-hover table-striped table-dark">'
+
+					//--->create table header > start
+					tbl +='<thead>';
+						tbl +='<tr>';
+						tbl +='<th class="text-center">#</th>';
+						tbl +='<th class="text-center">First Name</th>';
+						tbl +='<th class="text-center">Last Name</th>';
+						tbl +='<th class="text-center">Number of Votes</th>';
+						tbl +='<th class="text-center">Status</th>';
+						tbl +='<th class="text-center">Options</th>';
+						tbl +='</tr>';
+					tbl +='</thead>';
+					//--->create table header > end
+
+					
+					//--->create table body > start
+					tbl +='<tbody>';
+
+						//--->create table body rows > start
+						$.each(ajax_data, function(index, val) 
+						{
+							//you can replace with your database row id
+							var row_id = random_id();
+							var tempst
+							//loop through ajax row data
+							tbl +='<tr row_id="'+row_id+'">';
+								tbl +='<td ><div class="row_data text-center" edit_type="click" col_name="candino">'+val[0]+'</div></td>';
+								tbl +='<td ><div class="row_data text-center" edit_type="click" col_name="candifn">'+val[1]+'</div></td>';
+								tbl +='<td ><div class="row_data text-center" edit_type="click" col_name="candiln">'+val[2]+'</div></td>';
+								tbl +='<td ><div class="row_data text-center" edit_type="click" col_name="candiv">'+val[3]+'</div></td>';
+								if (val[4]== 0) {tempst="Inactive"};
+								if (val[4]== 1) {tempst="Active"};
+								if (val[4]== 2) {tempst="Withrawn"};
+								if (val[4]== 3) {tempst="Hidden"};
+								tbl +='<td ><div class="row_data text-center" edit_type="click" col_name="candis">'+ tempst +'</div></td>';
+								//--->edit options > start
+								tbl +='<td>';
+								 
+									tbl +='<span class="btn_edit" > <a href="#" class="btn btn-link " row_id="'+row_id+'" > Edit</a> </span>';
+
+									//only show this button if edit button is clicked
+									tbl +='<span class="btn_save"> <a href="#" class="btn btn-link"  row_id="'+row_id+'"> Save</a> | </span>';
+									tbl +='<span class="btn_cancel"> <a href="#" class="btn btn-link" row_id="'+row_id+'"> Cancel</a> | </span>';
+
+								tbl +='</td>';
+								//--->edit options > end
+								
+							tbl +='</tr>';
+						});
+
+						//--->create table body rows > end
+
+					tbl +='</tbody>';
+					//--->create table body > end
+
+				tbl +='</table>'	
+				//--->create data table > end
+		$(document).find('.tbl_user_data').html(tbl);
+		$(document).find('.btn_save').hide();
+		$(document).find('.btn_cancel').hide(); 
+		};
+		//--->make div editable > start
+		// $(document).on('click', '.row_data', function(event) 
+		// {
+		// 	event.preventDefault(); 
+
+		// 	if($(this).attr('edit_type') == 'button')
+		// 	{
+		// 		return false; 
+		// 	}
+
+		// 	//make div editable
+		// 	$(this).closest('div').attr('contenteditable', 'true');
+		// 	//add bg css
+		// 	$(this).addClass('bg-danger').css('padding','5px');
+
+		// 	$(this).focus();
+		// })	
+		//--->make div editable > end
+		//--->button > edit > start	
+		$(document).on('click', '.btn_edit', function(event) 
+		{
+			event.preventDefault();
+			var tbl_row = $(this).closest('tr');
+
+			var row_id = tbl_row.attr('row_id');
+
+			tbl_row.find('.btn_save').show();
+			tbl_row.find('.btn_cancel').show();
+
+			//hide edit button
+			tbl_row.find('.btn_edit').hide(); 
+
+			//make the whole row editable
+			tbl_row.find('.row_data')
+			.attr('contenteditable', 'true')
+			.attr('edit_type', 'button')
+			.addClass('bg-danger')
+			.css('padding','3px')
+
+			//--->add the original entry > start
+			tbl_row.find('.row_data').each(function(index, val) 
+			{  
+				//this will help in case user decided to click on cancel button
+				$(this).attr('original_entry', $(this).html());
+			}); 		
+			//--->add the original entry > end
+
+		});
+		//--->button > edit > end
+		 //--->button > cancel > start	
+		$(document).on('click', '.btn_cancel', function(event) 
+		{
+			event.preventDefault();
+
+			var tbl_row = $(this).closest('tr');
+
+			var row_id = tbl_row.attr('row_id');
+
+			//hide save and cacel buttons
+			tbl_row.find('.btn_save').hide();
+			tbl_row.find('.btn_cancel').hide();
+
+			//show edit button
+			tbl_row.find('.btn_edit').show();
+
+			//make the whole row editable
+			tbl_row.find('.row_data')
+			.attr('edit_type', 'click')	 
+			.removeClass('bg-danger')
+			.css('padding','') 
+
+			tbl_row.find('.row_data').each(function(index, val) 
+			{   
+				$(this).html( $(this).attr('original_entry') ); 
+			});  
+		});
+		//--->button > cancel > end
+
+		//--->save whole row entery > start	
+		$(document).on('click', '.btn_save', function(event) 
+		{
+			event.preventDefault();
+			var tbl_row = $(this).closest('tr');
+
+			var row_id = tbl_row.attr('row_id');
+
+			
+			//hide save and cacel buttons
+			tbl_row.find('.btn_save').hide();
+			tbl_row.find('.btn_cancel').hide();
+
+			//show edit button
+			tbl_row.find('.btn_edit').show();
+
+
+			//make the whole row editable
+			tbl_row.find('.row_data')
+			.attr('edit_type', 'click')	
+			.removeClass('bg-danger')
+			.css('padding','') 
+
+			//--->get row data > start
+			var arr = {}; 
+			tbl_row.find('.row_data').each(function(index, val) 
+			{   
+				var col_name = $(this).attr('col_name');  
+				var col_val  =  $(this).html();
+				arr[col_name] = col_val;
+			});
+			//--->get row data > end
+
+			//use the "arr"	object for your ajax call
+			$.extend(arr, {row_id:row_id});
+
+			//out put to show
+			$('.post_msg').html( '<pre class="bg-success">'+JSON.stringify(arr, null, 2) +'</pre>')
+			 
+
+		});
+		//--->save whole row entery > end
+		//--->save single field data > start
+		$(document).on('focusout', '.row_data', function(event) 
+		{
+			event.preventDefault();
+
+			if($(this).attr('edit_type') == 'button')
+			{
+				return false; 
+			}
+
+			var row_id = $(this).closest('tr').attr('row_id'); 
+			
+			var row_div = $(this)			
+			.removeClass('bg-danger') //add bg css
+			.css('padding','')
+
+			var col_name = row_div.attr('col_name'); 
+			var col_val = row_div.html(); 
+
+			var arr = {};
+			arr[col_name] = col_val;
+
+			//use the "arr"	object for your ajax call
+			$.extend(arr, {row_id:row_id});
+
+			//out put to show
+			$('.post_msg').html( '<pre class="bg-success">'+JSON.stringify(arr, null, 2) +'</pre>');
+			
+		})	
+		//--->save single field data > end
+
+		$(document).ready(function(){
+			msg = "This will clear all votes casted, continue?";
+        	document.getElementById("modal-msg").innerHTML = msg;
+			$(`#resetvotes`).click(function(){
+				$('#myModal').modal('show');
+			});
+
+			$(`#clearVote`).click(function(){
+				window.location.replace ('../php/resetvotes.php');
+			});
+
+			$(`#printcandidates`).click(function(){
+				location.assign("printableCandidateList.html")
+			});
+			varInit();
+		});
+	</script>
+</head>
+<body style="overflow-x: hidden;">
+
+
+ <!-- NAV SIDEBAR -->
+<?php include ('../php/navbar-insidev.php');?>
+<!-- END OF NAV SIDEBAR -->
+<div class="container-fluid">
+	<div class="text-white" style="margin-left: 200px;">
+		<br>
+		<button id="resetvotes" type="button" class="btn btn-danger">Reset Votes</button>
+		<button id="printcandidates" type="button" class="btn btn-success">Print</button>		
+	</div>
+	<div class="container-fluid text-white" style="margin-left: 200px;">
+		<br>
+		<div class='tbl_user_data'>
+	</div>
+</div>
+
+
+
+
+<div class="container">
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Attention!</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p id="modal-msg"></p>
+        </div>
+        <div class="modal-footer">
+          <button id="clearVote" type="button" class="btn btn-danger" data-dismiss="modal">Proceed</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+
+</body>
+</html>

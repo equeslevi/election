@@ -8,6 +8,21 @@
 	<script src="../js/bootstrap.bundle.js"></script>
 <body>
 
+<?php
+
+require_once('../php/config.php');
+
+$query = "SELECT * FROM settings";
+
+$response = @mysqli_query($db, $query);
+
+if ($response) {
+
+ } else {
+	header("location: ../error.html");
+}
+
+?>
 
 <?php include ('../php/navbar-admin.php');?>
 <!-- <div class="main">

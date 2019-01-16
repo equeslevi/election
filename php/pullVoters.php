@@ -7,17 +7,17 @@ $query = "SELECT * FROM voters";
 $response = @mysqli_query($db, $query);
 $voterData = array();
 $voter = array();
+$donevoters = 0;
 if ($response) {
 	$temp = 0;
 	while($row = mysqli_fetch_array($response)){
 		$temp++;
+		if ($row['voterVoted'] == 1 ) {
+			echo 'YES';
+			$donevoters = $donevoters +1;
+		}
 		$voterData[] = $row;
-		// $voterNo[$temp] = $row['voterId'];
-		// $voterLName[$temp] = $row['voterLName'];
-		// $voterFName[$temp] = $row['voterFName'];
-		// $voterDone[$temp] = $row['voterVoted'];
-		// $voterVoteDate[$temp] = $row['voterDate'];
-		// $voterVotes[$temp] = $row['votes'];
+
 	}
 	$voterTotal = $temp;
 	$voter = json_encode($voterData);

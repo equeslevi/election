@@ -7,17 +7,22 @@
 	<script src="../js/jquery3.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
 </head>
-<body>
+<body style="overflow-x: hidden;">
 <?php include ('../php/navbar-insidev.php');?>
 <?php include ('../php/pullCandidates.php');?>
 
-<div class="display-1 main vote-admin text-white" id="test"></div>
-
+<div class="main vote-admin text-white">
+	<div class="container-fluid text-white" style="margin-left: 200px;">
+		<br>
+		<table align="left" cellspacing="1" cellpadding="1" class="vote-admin">
+		
+		</table>
+	</div>
+</div>
 <script type="text/javascript">
 		$(document).ready(function(){
-			votermsg = "script is working";
 			candTotal = <?php echo $candTotal; ?>;
-			document.getElementById("test").innerHTML = candTotal;
+			document.getElementById("").innerHTML = candTotal;
 		});
 	</script>
 </body>

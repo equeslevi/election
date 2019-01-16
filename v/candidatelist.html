@@ -7,7 +7,22 @@
 	<link href="../css/index.css" rel="stylesheet">
 	<script src="../js/jquery3.min.js"></script>
 	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/sortTable.js"></script>
+	<?php
+		include ('../php/pullCandidates.php');
+		include ('../php/pullVoters.php')
+	?>
 	<script type="text/javascript">
+		var cTotal;
+		var cTableText;
+		var cand;
+		var vDone = <?php echo $donevoters; ?>;
+		var vTotal = <?php echo $voterTotal; ?>;
+		function varInit(){
+			cTotal = <?php echo $candTotal; ?>;
+			cand = <?php echo $cand; ?>;
+			cTableText = "<tr><td colspan='5' class='font-weight-bold' align='left'>Total Candidates: " + cTotal + "</td></tr><tr><td  colspan='5' class='font-weight-bold'>Members Voted: " + vDone + " out of " + vTotal + "</td></tr><tr><td class='text-center font-weight-bold' id='candino'>Candidate No</td><td class='text-center font-weight-bold' id='candiln'>First Name </td><td class='text-center font-weight-bold' id='candifn'>Last Name</td><td class='text-center font-weight-bold id='candiv''>Number of Votes</td><td class='text-center font-weight-bold id='candis''>Status</td></b></tr>";
+		};
 		$(document).ready(function(){
 			msg = "This will clear all votes casted, continue?";
         	document.getElementById("modal-msg").innerHTML = msg;
@@ -22,7 +37,61 @@
 			$(`#printcandidates`).click(function(){
 				location.assign("printableCandidateList.html")
 			});
-			
+			varInit();
+			var i;
+			var w;
+			for (w = 0; w <= cTotal-1; w++) { 
+			  cTableText += "<tr>";
+			    for (i = 0; i <= 4; i++) { 
+			      	if (i == 4) {
+						if (cand[w][i] == 0) {cTableText += "<td class='text-center'>Inctive</td>";}
+			      		if (cand[w][i] == 1) {cTableText += "<td class='text-center'>Active</td>";}
+			      		if (cand[w][i] == 2) {cTableText += "<td class='text-center'>Withrawn</td>";}
+			      		if (cand[w][i] == 3) {cTableText += "<td class='text-center'>Hidden</td>";}
+			      	} else{
+			      		cTableText += "<td align='left' class='text-center'>" + cand[w][i] + "</td>";		
+			      	}
+		    	}
+			cTableText += "</tr>";
+			}
+			cTableText += "</table>";
+			document.getElementById("candtable").innerHTML = cTableText;
+			//start table sort
+			var table = $('table');    
+		    $('#candino, #candiln, #candifn, #candiv, #candis')
+		        .wrapInner('<span title="Click to Sort"/>')
+		        .each(function(){
+		            
+		            var th = $(this),
+		                thIndex = th.index(),
+		                inverse = false;
+		            
+		            th.click(function(){
+		                
+		                table.find('td').filter(function(){
+		                    
+		                    return $(this).index() === thIndex;
+		                    
+		                }).sortElements(function(a, b){
+		                    
+		                    return $.text([a]) > $.text([b]) ?
+		                        inverse ? -1 : 1
+		                        : inverse ? 1 : -1;
+		                    
+		                }, function(){
+		                    
+		                    // parentNode is the element we want to move
+		                    return this.parentNode; 
+		                    
+		                });
+		                
+		                inverse = !inverse;
+		                    
+		            });
+		                
+		        });
+		 	//end table sort
+
 		});
 	</script>
 </head>
@@ -40,22 +109,8 @@
 	</div>
 	<div class="container-fluid text-white" style="margin-left: 200px;">
 		<br>
-		<table align="left" cellspacing="1" cellpadding="1" class="vote-admin">
-			<col width="70">
-  			<col width="200">
-  			<col width="200">
-  			<col width="100">
-			<tr>
-				<td align="left" class="text-center"><b>Candidate No</b></td>
-				<td align="left" class="text-center"><b> Last Name </b></td>
-				<td align="left" class="text-center"><b> First Name </b></td>
-				<td align="left" class="text-center"><b>Number of Votes</b></td>
-			</tr>
-				<!-- PHP CODE HERE for getCandidatesInfo -->
-		<?php include('../php/getCandidatesInfo.php'); ?>
+		<table align="left" cellspacing="1" cellpadding="1" class="table-sm table-hover table-striped table-dark" id="candtable">
 	</div>
-	
-	
 </div>
 
 

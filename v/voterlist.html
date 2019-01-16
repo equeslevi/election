@@ -9,21 +9,18 @@
 	<script src="../js/bootstrap.min.js"></script>
 	<?php include ('../php/pullVoters.php');?>
 	<script type="text/javascript">
-		var msg;
 		var vTotal;
 		var vTableText;
 		var voters;
 		function varInit(){
 			vTotal = <?php echo $voterTotal; ?>;
 			voters = <?php echo $voter; ?>;
-			vTableText = "<col width=70><col width=200><col width=300><col width=100><col width=300><col width=200><b><tr><td></td><td align='left' class='text-center'>Total Number of Voters:</td><td align='left' class='display-4' id='voterplacer'></td></tr><tr><td align='left' class='text-center'>Voter ID</td><td align='left' class='text-center'>Last Name</td><td align='left' class='text-center'>First Name</td><td align='left' class='text-center'>Voted?</td><td align='left' class='text-center'>Date Voted<br>YYYY-MM-DD</td>				<td align='left' class='text-center'>Votes Casted</td></tr></b>"
+			vTableText = "<col width=70><col width=200><col width=300><col width=100><col width=300><col width=200><b><tr><td colspan='2' class='text-center font-weight-bold'>Total Number of Voters:</td><td colspan='4' class='display-4 font-weight-bold'>" + vTotal + "</td></tr><tr><td class='text-center font-weight-bold'>Voter ID</td><td class='text-center font-weight-bold'>Last Name</td><td class='text-center font-weight-bold'>First Name</td><td class='text-center font-weight-bold'>Voted?</td><td class='text-center font-weight-bold'>Date Voted<br>YYYY-MM-DD</td><td class='text-center font-weight-bold'>Votes Casted</td></tr></b>"
 		};
-
 		$(document).ready(function(){
 			$(`#resetvotes`).click(function(){
 				$('#myModal').modal('show');
 			});
-
 			$(`#clearVote`).click(function(){
 				window.location.replace ('../php/resetvoters.php');
 			});
@@ -35,22 +32,21 @@
 			    for (i = 0; i <= 5; i++) { 
 			      	if (i==3) {
 			      		if (voters[w][3]=="1") {
-			      			vTableText += "<td align='left' class='text-center'>YES</td>"
+			      			vTableText += "<td class='text-center'>YES</td>"
 			      		} else {
-			      			vTableText += "<td align='left' class='text-center'></td>"
+			      			vTableText += "<td class='text-center'></td>"
 			      		}
 			      	}else{
 		    	  	if (voters[w][i]==null||voters[w][i]=="null"||voters[w][i]==0) {
-		    	  		vTableText += "<td align='left' class='text-center'></td>";	
+		    	  		vTableText += "<td class='text-center'></td>";	
 		    	  	} else {
-		    	  		vTableText += "<td align='left' class='text-center'>" + voters[w][i] + "</td>";	
+		    	  		vTableText += "<td class='text-center'>" + voters[w][i] + "</td>";	
 		    	  	}}
 			    }
 			 vTableText += "</tr>";
 			}
 			 vTableText += "</table>";
 			document.getElementById("votertable").innerHTML = vTableText;
-			document.getElementById("voterplacer").innerHTML = vTotal;
 			msg = "This will clear all voters who voted and the date, continue?";
         	document.getElementById("modal-msg").innerHTML = msg;
 
@@ -61,25 +57,16 @@
  <!-- NAV SIDEBAR -->
 <?php include ('../php/navbar-insidev.php');?>
 <!-- END OF NAV SIDEBAR -->
-
-<div class="container-fluid">
-	<div class="text-white main">
+<div class="container-fluid main">
+	<div class="text-white">
 		<br>
 		<button id="resetvotes" type="button" class="btn btn-danger">Reset Voters</button>
 	</div>
-	<div class="container-fluid text-white main">
+	<div class="container-fluid text-white">
 		<br>
-		<table align='left' cellspacing="1" cellpadding="1" class="vote-admin" id="votertable">
-			
-		<!-- PHP CODE HERE for getVotersInfo -->
-		
+		<table cellspacing="1" cellpadding="1" class="table-sm table-hover table-striped table-dark" id="votertable">
 	</div>
-	
-	
 </div>
-
-
-
 
 <div class="container">
   <!-- Modal -->
